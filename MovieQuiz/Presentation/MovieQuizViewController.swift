@@ -22,9 +22,13 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet private var textLabel: UILabel!
     
     @IBAction func noButtonClicked(_ sender: Any) {
+        let correctAnswer = questions[currentQuestionIndex].correctAnswer
+        showAnswerResult(isCorrect: correctAnswer == false)
     }
     
     @IBAction func yesButtonClicked(_ sender: Any) {
+        let correctAnswer = questions[currentQuestionIndex].correctAnswer
+        showAnswerResult(isCorrect: correctAnswer == true)
     }
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
@@ -38,6 +42,13 @@ final class MovieQuizViewController: UIViewController {
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
+    }
+    
+    private func showAnswerResult(isCorrect: Bool) {
+        imageView.layer.masksToBounds = true
+        imageView.layer.borderWidth = 8
+        imageView.layer.cornerRadius = 20
+        imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
     }
     
     
