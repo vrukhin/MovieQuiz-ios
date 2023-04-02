@@ -57,7 +57,22 @@ final class MovieQuizViewController: UIViewController {
     
     private func showNextQuestionOrResult() {
         if currentQuestionIndex == questions.count - 1 {
-            //
+            let alert = UIAlertController(title: "Этот раунд окончен",
+                                          message: "Ваш результат ???",
+                                          preferredStyle: .alert)
+
+            let action = UIAlertAction(title: "Сыграть еще раз", style: .default) { _ in
+                self.currentQuestionIndex = 0
+                
+                let firstQuestion = self.questions[self.currentQuestionIndex]
+                let viewModel = self.convert(model: firstQuestion)
+                
+                self.show(quiz: viewModel)
+            }
+
+            alert.addAction(action)
+
+            self.present(alert, animated: true, completion: nil)
         } else {
             currentQuestionIndex += 1
             
