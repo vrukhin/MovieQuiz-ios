@@ -78,6 +78,7 @@ final class MovieQuizViewController: UIViewController {
     }
     
     private func showNextQuestionOrResult() {
+        imageView.layer.borderWidth = 0
         if currentQuestionIndex == questions.count - 1 {
             let text = "Ваш результат \(correctAnswers)/\(questions.count)"
             let viewModel = QuizResultViewModel(
