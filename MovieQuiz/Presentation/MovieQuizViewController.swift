@@ -17,16 +17,20 @@ final class MovieQuizViewController: UIViewController {
         ]
     
     
+    @IBOutlet private var noButton: UIButton!
+    @IBOutlet private var yesButton: UIButton!
     @IBOutlet private var counterLabel: UILabel!
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var textLabel: UILabel!
     
     @IBAction func noButtonClicked(_ sender: Any) {
+        noButton.isEnabled = false
         let correctAnswer = questions[currentQuestionIndex].correctAnswer
         showAnswerResult(isCorrect: correctAnswer == false)
     }
     
     @IBAction func yesButtonClicked(_ sender: Any) {
+        yesButton.isEnabled = false
         let correctAnswer = questions[currentQuestionIndex].correctAnswer
         showAnswerResult(isCorrect: correctAnswer == true)
     }
@@ -79,6 +83,8 @@ final class MovieQuizViewController: UIViewController {
     
     private func showNextQuestionOrResult() {
         imageView.layer.borderWidth = 0
+        noButton.isEnabled = true
+        yesButton.isEnabled = true
         if currentQuestionIndex == questions.count - 1 {
             let text = "Ваш результат \(correctAnswers)/\(questions.count)"
             let viewModel = QuizResultViewModel(
