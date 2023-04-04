@@ -128,7 +128,7 @@ private struct QuizResultViewModel {
     let buttonText: String
 }
 
-struct QuizQuestion {
+private struct QuizQuestion {
     let image: String
     let text: String
     let correctAnswer: Bool
