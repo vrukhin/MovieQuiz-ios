@@ -23,13 +23,13 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var textLabel: UILabel!
     
-    @IBAction func noButtonClicked(_ sender: Any) {
+    @IBAction private func noButtonClicked(_ sender: Any) {
         noButton.isEnabled = false
         let correctAnswer = questions[currentQuestionIndex].correctAnswer
         showAnswerResult(isCorrect: correctAnswer == false)
     }
     
-    @IBAction func yesButtonClicked(_ sender: Any) {
+    @IBAction private func yesButtonClicked(_ sender: Any) {
         yesButton.isEnabled = false
         let correctAnswer = questions[currentQuestionIndex].correctAnswer
         showAnswerResult(isCorrect: correctAnswer == true)
@@ -69,9 +69,7 @@ final class MovieQuizViewController: UIViewController {
     }
     
     private func showAnswerResult(isCorrect: Bool) {
-        imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
-        imageView.layer.cornerRadius = 20
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         
         correctAnswers = isCorrect ? correctAnswers + 1 : correctAnswers
@@ -106,6 +104,8 @@ final class MovieQuizViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = 20
         show(quiz: convert(model: questions[currentQuestionIndex]))
     }
 }
