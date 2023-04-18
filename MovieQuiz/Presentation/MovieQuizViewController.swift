@@ -1,6 +1,6 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
+final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, AlertPresenterDelegate {
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
     private let questionsAmount: Int = 10
@@ -41,6 +41,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         counterLabel.text = step.questionNumber
     }
     
+    /*
     private func show(quiz result: QuizResultViewModel) {
         let alert = UIAlertController(title: result.title,
                                       message: result.text,
@@ -58,6 +59,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
         self.present(alert, animated: true, completion: nil)
     }
+    */
     
     private func showAnswerResult(isCorrect: Bool) {
         imageView.layer.borderWidth = 8
@@ -76,12 +78,18 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         noButton.isEnabled = true
         yesButton.isEnabled = true
         if currentQuestionIndex == questionsAmount - 1 {
-            let text = "Ваш результат \(correctAnswers)/\(questionsAmount)"
-            let viewModel = QuizResultViewModel(
-                title: "Этот раунд окончен",
-                text: text,
-                buttonText: "Сыграть еще раз?")
-            show(quiz: viewModel)
+            let alertPresenter = AlertPresenter(delegate: self)
+            let alertModel = AlertModel(title: "Этот раунд окончен",
+                                        message: "Ваш результат \(correctAnswers)/\(questionsAmount)",
+                                        buttonText: "Сыграть еще раз?",
+                                        completion: {
+                self.currentQuestionIndex = 0
+                self.correctAnswers = 0
+                
+                self.questionFactory?.requestNextQuestion()
+            }
+            )
+            alertPresenter.show(alertModel: alertModel)
         } else {
             currentQuestionIndex += 1
 
@@ -111,6 +119,14 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         DispatchQueue.main.async { [weak self] in
             self?.show(quiz: viewModel)
         }
+    }
+    
+    // MARK: - AlertPresenterDelegate
+    func didReceiveAlert(alert: UIAlertController?) {
+        guard let alert = alert else {
+            return
+        }
+        self.present(alert, animated: true)
     }
 }
 
