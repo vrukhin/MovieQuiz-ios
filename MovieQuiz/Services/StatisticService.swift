@@ -88,12 +88,6 @@ final class StatisticServiceImplementation: StatisticService {
             userDefaults.set(data, forKey: Keys.bestGame.rawValue)
         }
     }
-/*
-    init(totalAccuracy: Double, gamesCount: Int) {
-        self.totalAccuracy = totalAccuracy
-        self.gamesCount = gamesCount
-    }
-*/
 }
 
 struct GameRecord: Codable {
