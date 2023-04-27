@@ -6,6 +6,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     private let questionsAmount: Int = 10
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
+    private var statisticService: StatisticService?
     
     
     @IBOutlet private var noButton: UIButton!
@@ -78,9 +79,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         noButton.isEnabled = true
         yesButton.isEnabled = true
         if currentQuestionIndex == questionsAmount - 1 {
+            statisticService!.store(correct: correctAnswers, total: questionsAmount)
+            let totalAccuracy = String(format: "%.2f", statisticService!.totalAccuracy)
             let alertPresenter = AlertPresenter(delegate: self)
             let alertModel = AlertModel(title: "Этот раунд окончен",
-                                        message: "Ваш результат \(correctAnswers)/\(questionsAmount)",
+                                        message: "Ваш результат \(correctAnswers)/\(questionsAmount)\nКоличество сыгранных квизов: \(statisticService!.gamesCount)\nРекорд: \(statisticService!.bestGame.correct)/\(statisticService!.bestGame.total) (\(statisticService!.bestGame.date.dateTimeString))\nСредняя точность: \(totalAccuracy)%",
                                         buttonText: "Сыграть еще раз?",
                                         completion: {
                 self.currentQuestionIndex = 0
@@ -106,6 +109,9 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         
         questionFactory = QuestionFactory(delegate: self)
         questionFactory?.requestNextQuestion()
+        
+        statisticService = StatisticServiceImplementation()
+        
     }
     
     // MARK: - QuestionFactoryDelegate
