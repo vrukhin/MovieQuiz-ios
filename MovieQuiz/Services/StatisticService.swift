@@ -31,41 +31,21 @@ final class StatisticServiceImplementation: StatisticService {
     
     var totalAccuracy: Double {
         get {
-            guard let data = userDefaults.data(forKey: Keys.total.rawValue),
-                  let total = try? JSONDecoder().decode(Double.self, from: data) else {
-                return 0
-            }
-            
-            return total
+            return userDefaults.double(forKey: Keys.total.rawValue)
         }
         
         set {
-            guard let data = try? JSONEncoder().encode(newValue) else {
-                print("Невозможно сохранить результат")
-                return
-            }
-            
-            userDefaults.set(data, forKey: Keys.total.rawValue)
+            userDefaults.set(newValue, forKey: Keys.total.rawValue)
         }
     }
     
     var gamesCount: Int {
         get {
-            guard let data = userDefaults.data(forKey: Keys.gamesCount.rawValue),
-                  let games = try? JSONDecoder().decode(Int.self, from: data) else {
-                return 0
-            }
-            
-            return games
+                return userDefaults.integer(forKey: Keys.gamesCount.rawValue)
         }
         
         set {
-            guard let data = try? JSONEncoder().encode(newValue) else {
-                print("Невозможно сохранить результат")
-                return
-            }
-            
-            userDefaults.set(data, forKey: Keys.gamesCount.rawValue)
+            userDefaults.set(newValue, forKey: Keys.gamesCount.rawValue)
         }
     }
     
@@ -94,8 +74,4 @@ struct GameRecord: Codable {
     let correct: Int
     let total: Int
     let date: Date
-    
-    func compare(with newResult: GameRecord) -> Bool {
-        return self.correct < newResult.correct
-    }
 }
