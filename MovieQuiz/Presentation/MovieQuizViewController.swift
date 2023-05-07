@@ -9,12 +9,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     private var statisticService: StatisticService?
     
     
-    @IBOutlet private var activityIndicator: UIActivityIndicatorView!
-    @IBOutlet private var noButton: UIButton!
-    @IBOutlet private var yesButton: UIButton!
-    @IBOutlet private var counterLabel: UILabel!
-    @IBOutlet private var imageView: UIImageView!
-    @IBOutlet private var textLabel: UILabel!
+    @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet private weak var noButton: UIButton!
+    @IBOutlet private weak var yesButton: UIButton!
+    @IBOutlet private weak var counterLabel: UILabel!
+    @IBOutlet private weak var imageView: UIImageView!
+    @IBOutlet private weak var textLabel: UILabel!
     
     @IBAction private func noButtonClicked(_ sender: Any) {
         noButton.isEnabled = false
