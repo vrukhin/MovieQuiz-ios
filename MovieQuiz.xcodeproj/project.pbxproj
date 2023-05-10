@@ -11,6 +11,7 @@
 		4E22C9D929CF3FFA00D70772 /* YS Display-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E22C9D729CF3FFA00D70772 /* YS Display-Bold.ttf */; };
 		4E22C9DA29CF3FFA00D70772 /* YS Display-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E22C9D829CF3FFA00D70772 /* YS Display-Medium.ttf */; };
 		4E4318EC2A0A9C590074AEDC /* ArrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4318EB2A0A9C590074AEDC /* ArrayTests.swift */; };
+		4E86C6FD2A0AB4E1009D2A3E /* MoviesLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E86C6FC2A0AB4E1009D2A3E /* MoviesLoaderTests.swift */; };
 		4E96DC9129EC87B100D237B7 /* AlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E96DC9029EC87B100D237B7 /* AlertModel.swift */; };
 		4E96DC9329EC886B00D237B7 /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E96DC9229EC886B00D237B7 /* AlertPresenter.swift */; };
 		4EA326E229EC4E92001B5A19 /* QuestionFactoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA326E129EC4E92001B5A19 /* QuestionFactoryDelegate.swift */; };
@@ -50,6 +51,7 @@
 		4E22C9D829CF3FFA00D70772 /* YS Display-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Medium.ttf"; sourceTree = "<group>"; };
 		4E4318EB2A0A9C590074AEDC /* ArrayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayTests.swift; sourceTree = "<group>"; };
 		4E6D7E412A0A9AEF00945EC8 /* MovieQuizTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MovieQuizTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E86C6FC2A0AB4E1009D2A3E /* MoviesLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesLoaderTests.swift; sourceTree = "<group>"; };
 		4E96DC9029EC87B100D237B7 /* AlertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModel.swift; sourceTree = "<group>"; };
 		4E96DC9229EC886B00D237B7 /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
 		4EA326E129EC4E92001B5A19 /* QuestionFactoryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionFactoryDelegate.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				4E4318EB2A0A9C590074AEDC /* ArrayTests.swift */,
+				4E86C6FC2A0AB4E1009D2A3E /* MoviesLoaderTests.swift */,
 			);
 			path = MovieQuizTests;
 			sourceTree = "<group>";
@@ -296,6 +299,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4E4318EC2A0A9C590074AEDC /* ArrayTests.swift in Sources */,
+				4E86C6FD2A0AB4E1009D2A3E /* MoviesLoaderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
