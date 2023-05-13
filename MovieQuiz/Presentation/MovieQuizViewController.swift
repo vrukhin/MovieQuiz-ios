@@ -56,7 +56,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         
         let model = AlertModel(title: "Ошибка",
                                message: message,
-                               buttonText: "Попробовать еще раз") { [weak self] in
+                               buttonText: "Попробовать еще раз",
+                               id: "NetworkErrorAlert") { [weak self] in
             guard let self = self else { return }
             
             self.currentQuestionIndex = 0
@@ -104,6 +105,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
             let alertModel = AlertModel(title: "Этот раунд окончен",
                                         message: "Ваш результат \(correctAnswers)/\(questionsAmount)\nКоличество сыгранных квизов: \(statisticService!.gamesCount)\nРекорд: \(statisticService!.bestGame.correct)/\(statisticService!.bestGame.total) (\(statisticService!.bestGame.date.dateTimeString))\nСредняя точность: \(totalAccuracy)%",
                                         buttonText: "Сыграть еще раз?",
+                                        id: "GameResults",
                                         completion: {
                 self.currentQuestionIndex = 0
                 self.correctAnswers = 0
