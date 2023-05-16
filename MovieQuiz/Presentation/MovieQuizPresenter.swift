@@ -24,7 +24,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         let result = "Ваш результат \(correctAnswers)/\(questionsAmount)\n"
         let games = "Количество сыгранных квизов: \(statisticService!.gamesCount)\n"
         let record = "Рекорд: \(statisticService!.bestGame.correct)/\(statisticService!.bestGame.total) "
-        let recordDate = "\(statisticService!.bestGame.date.dateTimeString)\n"
+        let recordDate = "(\(statisticService!.bestGame.date.dateTimeString))\n"
         let totalAccuracy = String(format: "%.2f", statisticService!.totalAccuracy)
         let accuracy = "Средняя точность: \(totalAccuracy)%"
         let message = result + games + record + recordDate + accuracy
