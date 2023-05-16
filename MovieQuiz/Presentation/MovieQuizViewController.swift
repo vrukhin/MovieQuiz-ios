@@ -1,7 +1,6 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
-    var statisticService: StatisticService?
     private var presenter: MovieQuizPresenter!
     
     
@@ -68,8 +67,6 @@ final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
         
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = 20
-        
-        statisticService = StatisticServiceImplementation()
         
         presenter.initGame()
         

@@ -14,6 +14,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     private var currentQuestionIndex: Int = 0
     private weak var viewController: MovieQuizViewController?
     private var questionFactory: QuestionFactoryProtocol?
+    var statisticService: StatisticService?
     
     init(viewController: MovieQuizViewController) {
         self.viewController = viewController
@@ -21,16 +22,17 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     
     private var resultMessage: String {
         let result = "Ваш результат \(correctAnswers)/\(questionsAmount)\n"
-        let games = "Количество сыгранных квизов: \(viewController!.statisticService!.gamesCount)\n"
-        let record = "Рекорд: \(viewController!.statisticService!.bestGame.correct)/\(viewController!.statisticService!.bestGame.total) "
-        let recordDate = "\(viewController!.statisticService!.bestGame.date.dateTimeString)\n"
-        let totalAccuracy = String(format: "%.2f", (viewController?.statisticService!.totalAccuracy)!)
+        let games = "Количество сыгранных квизов: \(statisticService!.gamesCount)\n"
+        let record = "Рекорд: \(statisticService!.bestGame.correct)/\(statisticService!.bestGame.total) "
+        let recordDate = "\(statisticService!.bestGame.date.dateTimeString)\n"
+        let totalAccuracy = String(format: "%.2f", statisticService!.totalAccuracy)
         let accuracy = "Средняя точность: \(totalAccuracy)%"
         let message = result + games + record + recordDate + accuracy
         return message
     }
     
     func initGame() {
+        statisticService = StatisticServiceImplementation()
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         questionFactory?.loadData()
     }
@@ -111,7 +113,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     func showNextQuestionOrResult() {
         if self.isLastQuestion() {
             //TODO: вынести инициализацию statisticService в presenter из ViewController
-            viewController?.statisticService!.store(correct: correctAnswers, total: self.questionsAmount)
+            statisticService!.store(correct: correctAnswers, total: self.questionsAmount)
             let alertPresenter = AlertPresenter(delegate: viewController!)
             //TODO: вынести message для alertModel в отдельное свойство
             let alertModel = AlertModel(title: "Этот раунд окончен",
