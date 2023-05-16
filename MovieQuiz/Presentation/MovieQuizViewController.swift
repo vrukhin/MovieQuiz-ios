@@ -1,12 +1,11 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, AlertPresenterDelegate {
-    private var currentQuestionIndex = 0
     private var correctAnswers = 0
-    private let questionsAmount: Int = 10
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
     private var statisticService: StatisticService?
+    private let presenter = MovieQuizPresenter()
     
     
     @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
@@ -60,20 +59,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
                                id: "NetworkErrorAlert") { [weak self] in
             guard let self = self else { return }
             
-            self.currentQuestionIndex = 0
+            self.presenter.resetQuestionIndex()
             self.correctAnswers = 0
             
             self.questionFactory?.requestNextQuestion()
         }
         
         alertPresenter.show(alertModel: model)
-    }
-    
-    private func convert(model: QuizQuestion) -> QuizStepViewModel {
-        return QuizStepViewModel(
-            image: UIImage(data: model.image) ?? UIImage(),
-            question: model.text,
-            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
     }
     
     private func show(quiz step: QuizStepViewModel) {
@@ -98,16 +90,16 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         imageView.layer.borderWidth = 0
         noButton.isEnabled = true
         yesButton.isEnabled = true
-        if currentQuestionIndex == questionsAmount - 1 {
-            statisticService!.store(correct: correctAnswers, total: questionsAmount)
+        if presenter.isLastQuestion() {
+            statisticService!.store(correct: correctAnswers, total: presenter.questionsAmount)
             let totalAccuracy = String(format: "%.2f", statisticService!.totalAccuracy)
             let alertPresenter = AlertPresenter(delegate: self)
             let alertModel = AlertModel(title: "Этот раунд окончен",
-                                        message: "Ваш результат \(correctAnswers)/\(questionsAmount)\nКоличество сыгранных квизов: \(statisticService!.gamesCount)\nРекорд: \(statisticService!.bestGame.correct)/\(statisticService!.bestGame.total) (\(statisticService!.bestGame.date.dateTimeString))\nСредняя точность: \(totalAccuracy)%",
+                                        message: "Ваш результат \(correctAnswers)/\(presenter.questionsAmount)\nКоличество сыгранных квизов: \(statisticService!.gamesCount)\nРекорд: \(statisticService!.bestGame.correct)/\(statisticService!.bestGame.total) (\(statisticService!.bestGame.date.dateTimeString))\nСредняя точность: \(totalAccuracy)%",
                                         buttonText: "Сыграть еще раз?",
                                         id: "GameResults",
                                         completion: {
-                self.currentQuestionIndex = 0
+                self.presenter.resetQuestionIndex()
                 self.correctAnswers = 0
                 
                 self.questionFactory?.requestNextQuestion()
@@ -115,7 +107,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
             )
             alertPresenter.show(alertModel: alertModel)
         } else {
-            currentQuestionIndex += 1
+            presenter.switchToNextQuestion()
 
             questionFactory?.requestNextQuestion()
         }
@@ -142,7 +134,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         }
         
         currentQuestion = question
-        let viewModel = convert(model: question)
+        let viewModel = presenter.convert(model: question)
         DispatchQueue.main.async { [weak self] in
             self?.show(quiz: viewModel)
         }
