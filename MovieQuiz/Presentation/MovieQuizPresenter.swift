@@ -19,11 +19,21 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         self.viewController = viewController
     }
     
+    private var resultMessage: String {
+        let result = "Ваш результат \(correctAnswers)/\(questionsAmount)\n"
+        let games = "Количество сыгранных квизов: \(viewController!.statisticService!.gamesCount)\n"
+        let record = "Рекорд: \(viewController!.statisticService!.bestGame.correct)/\(viewController!.statisticService!.bestGame.total) "
+        let recordDate = "\(viewController!.statisticService!.bestGame.date.dateTimeString)\n"
+        let totalAccuracy = String(format: "%.2f", (viewController?.statisticService!.totalAccuracy)!)
+        let accuracy = "Средняя точность: \(totalAccuracy)%"
+        let message = result + games + record + recordDate + accuracy
+        return message
+    }
+    
     func initGame() {
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         questionFactory?.loadData()
     }
-    
     
     func didLoadDataFromServer() {
         viewController?.hideLoadingIndicator()
@@ -46,8 +56,6 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             guard let self = self else { return }
             
             self.restartGame()
-            
-            
             self.questionFactory?.requestNextQuestion()
         }
         
@@ -104,11 +112,10 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         if self.isLastQuestion() {
             //TODO: вынести инициализацию statisticService в presenter из ViewController
             viewController?.statisticService!.store(correct: correctAnswers, total: self.questionsAmount)
-            let totalAccuracy = String(format: "%.2f", (viewController?.statisticService!.totalAccuracy)!)
             let alertPresenter = AlertPresenter(delegate: viewController!)
             //TODO: вынести message для alertModel в отдельное свойство
             let alertModel = AlertModel(title: "Этот раунд окончен",
-                                        message: "Ваш результат \(correctAnswers)/\(self.questionsAmount)\nКоличество сыгранных квизов: \(viewController?.statisticService!.gamesCount)\nРекорд: \(viewController?.statisticService!.bestGame.correct)/\(viewController?.statisticService!.bestGame.total) (\(viewController?.statisticService!.bestGame.date.dateTimeString))\nСредняя точность: \(totalAccuracy)%",
+                                        message: resultMessage,
                                         buttonText: "Сыграть еще раз?",
                                         id: "GameResults",
                                         completion: {
