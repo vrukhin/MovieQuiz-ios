@@ -1,9 +1,8 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, AlertPresenterDelegate {
-    private var correctAnswers = 0
     private var questionFactory: QuestionFactoryProtocol?
-    private var statisticService: StatisticService?
+    var statisticService: StatisticService?
     private let presenter = MovieQuizPresenter()
     
     
@@ -54,8 +53,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
                                id: "NetworkErrorAlert") { [weak self] in
             guard let self = self else { return }
             
-            self.presenter.resetQuestionIndex()
-            self.correctAnswers = 0
+            self.presenter.restartGame()
+            
             
             self.questionFactory?.requestNextQuestion()
         }
@@ -73,41 +72,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         imageView.layer.borderWidth = 8
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         
-        correctAnswers = isCorrect ? correctAnswers + 1 : correctAnswers
-        
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
-            self.showNextQuestionOrResult()
+            presenter.showNextQuestionOrResult()
         }
     }
-    
-    private func showNextQuestionOrResult() {
-        imageView.layer.borderWidth = 0
-        noButton.isEnabled = true
-        yesButton.isEnabled = true
-        if presenter.isLastQuestion() {
-            statisticService!.store(correct: correctAnswers, total: presenter.questionsAmount)
-            let totalAccuracy = String(format: "%.2f", statisticService!.totalAccuracy)
-            let alertPresenter = AlertPresenter(delegate: self)
-            let alertModel = AlertModel(title: "Этот раунд окончен",
-                                        message: "Ваш результат \(correctAnswers)/\(presenter.questionsAmount)\nКоличество сыгранных квизов: \(statisticService!.gamesCount)\nРекорд: \(statisticService!.bestGame.correct)/\(statisticService!.bestGame.total) (\(statisticService!.bestGame.date.dateTimeString))\nСредняя точность: \(totalAccuracy)%",
-                                        buttonText: "Сыграть еще раз?",
-                                        id: "GameResults",
-                                        completion: {
-                self.presenter.resetQuestionIndex()
-                self.correctAnswers = 0
-                
-                self.questionFactory?.requestNextQuestion()
-            }
-            )
-            alertPresenter.show(alertModel: alertModel)
-        } else {
-            presenter.switchToNextQuestion()
-
-            questionFactory?.requestNextQuestion()
-        }
-    }
-    
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
