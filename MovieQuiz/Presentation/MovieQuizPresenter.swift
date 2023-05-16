@@ -7,13 +7,52 @@
 
 import UIKit
 
-final class MovieQuizPresenter {
+final class MovieQuizPresenter: QuestionFactoryDelegate {
     let questionsAmount: Int = 10
     var currentQuestion: QuizQuestion?
-    weak var viewController: MovieQuizViewController?
     private var correctAnswers = 0
     private var currentQuestionIndex: Int = 0
+    private weak var viewController: MovieQuizViewController?
     private var questionFactory: QuestionFactoryProtocol?
+    
+    init(viewController: MovieQuizViewController) {
+        self.viewController = viewController
+    }
+    
+    func initGame() {
+        questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
+        questionFactory?.loadData()
+    }
+    
+    
+    func didLoadDataFromServer() {
+        viewController?.hideLoadingIndicator()
+        questionFactory?.requestNextQuestion()
+    }
+    
+    func didFailToLoadData(with error: Error) {
+        showNetworkError(message: error.localizedDescription)
+    }
+    
+    private func showNetworkError(message: String) {
+        viewController?.hideLoadingIndicator()
+        
+        let alertPresenter = AlertPresenter(delegate: viewController!)
+        
+        let model = AlertModel(title: "Ошибка",
+                               message: message,
+                               buttonText: "Попробовать еще раз",
+                               id: "NetworkErrorAlert") { [weak self] in
+            guard let self = self else { return }
+            
+            self.restartGame()
+            
+            
+            self.questionFactory?.requestNextQuestion()
+        }
+        
+        alertPresenter.show(alertModel: model)
+    }
     
     func isLastQuestion() -> Bool {
         currentQuestionIndex == questionsAmount - 1

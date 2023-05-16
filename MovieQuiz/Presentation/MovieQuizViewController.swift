@@ -1,9 +1,8 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, AlertPresenterDelegate {
-    private var questionFactory: QuestionFactoryProtocol?
+final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
     var statisticService: StatisticService?
-    private let presenter = MovieQuizPresenter()
+    private var presenter: MovieQuizPresenter!
     
     
     @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
@@ -23,43 +22,14 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         presenter.yesButtonClicked()
     }
     
-    private func showLoadingIndicator() {
+    func showLoadingIndicator() {
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
     }
     
-    private func hideLoadingIndicator() {
+    func hideLoadingIndicator() {
         activityIndicator.isHidden = true
         activityIndicator.stopAnimating()
-    }
-    
-    func didLoadDataFromServer() {
-        hideLoadingIndicator()
-        questionFactory?.requestNextQuestion()
-    }
-    
-    func didFailToLoadData(with error: Error) {
-        showNetworkError(message: error.localizedDescription)
-    }
-    
-    private func showNetworkError(message: String) {
-        hideLoadingIndicator()
-        
-        let alertPresenter = AlertPresenter(delegate: self)
-        
-        let model = AlertModel(title: "Ошибка",
-                               message: message,
-                               buttonText: "Попробовать еще раз",
-                               id: "NetworkErrorAlert") { [weak self] in
-            guard let self = self else { return }
-            
-            self.presenter.restartGame()
-            
-            
-            self.questionFactory?.requestNextQuestion()
-        }
-        
-        alertPresenter.show(alertModel: model)
     }
     
     func show(quiz step: QuizStepViewModel) {
@@ -81,15 +51,17 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter = MovieQuizPresenter(viewController: self)
+        
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = 20
         
-        presenter.viewController = self
-        questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         statisticService = StatisticServiceImplementation()
         
+        presenter.initGame()
+        
         showLoadingIndicator()
-        questionFactory?.loadData()
     }
     
     // MARK: - QuestionFactoryDelegate
