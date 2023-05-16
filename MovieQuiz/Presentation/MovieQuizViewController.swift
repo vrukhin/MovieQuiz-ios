@@ -13,13 +13,23 @@ final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
     @IBOutlet private weak var textLabel: UILabel!
     
     @IBAction private func noButtonClicked(_ sender: Any) {
-        noButton.isEnabled = false
+        disableButtons()
         presenter.noButtonClicked()
     }
     
     @IBAction private func yesButtonClicked(_ sender: Any) {
-        yesButton.isEnabled = false
+        disableButtons()
         presenter.yesButtonClicked()
+    }
+    
+    private func disableButtons() {
+        yesButton.isEnabled = false
+        noButton.isEnabled = false
+    }
+    
+    private func enableButtons() {
+        yesButton.isEnabled = true
+        noButton.isEnabled = true
     }
     
     func showLoadingIndicator() {
@@ -44,6 +54,7 @@ final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
+            enableButtons()
             presenter.showNextQuestionOrResult()
         }
     }
