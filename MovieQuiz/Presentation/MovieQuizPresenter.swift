@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class MovieQuizPresenter: QuestionFactoryDelegate {
+final class MovieQuizPresenter: QuestionFactoryDelegate, AlertPresenterDelegate {
     let questionsAmount: Int = 10
     var currentQuestion: QuizQuestion?
     private var correctAnswers = 0
@@ -49,7 +49,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     private func showNetworkError(message: String) {
         viewController?.hideLoadingIndicator()
         
-        let alertPresenter = AlertPresenter(delegate: viewController!)
+        let alertPresenter = AlertPresenter(delegate: self)
         
         let model = AlertModel(title: "Ошибка",
                                message: message,
@@ -123,7 +123,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     func showNextQuestionOrResult() {
         if self.isLastQuestion() {
             statisticService!.store(correct: correctAnswers, total: self.questionsAmount)
-            let alertPresenter = AlertPresenter(delegate: viewController!)
+            let alertPresenter = AlertPresenter(delegate: self)
             let alertModel = AlertModel(title: "Этот раунд окончен",
                                         message: resultMessage,
                                         buttonText: "Сыграть еще раз?",
@@ -139,5 +139,13 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             self.switchToNextQuestion()
             self.questionFactory?.requestNextQuestion()
         }
+    }
+    
+    // MARK: - AlertPresenterDelegate
+    func didReceiveAlert(alert: UIAlertController?) {
+        guard let alert = alert else {
+            return
+        }
+        viewController?.present(alert, animated: true)
     }
 }
