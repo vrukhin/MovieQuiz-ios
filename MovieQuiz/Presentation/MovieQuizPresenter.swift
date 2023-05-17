@@ -115,7 +115,6 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             //TODO: вынести инициализацию statisticService в presenter из ViewController
             statisticService!.store(correct: correctAnswers, total: self.questionsAmount)
             let alertPresenter = AlertPresenter(delegate: viewController!)
-            //TODO: вынести message для alertModel в отдельное свойство
             let alertModel = AlertModel(title: "Этот раунд окончен",
                                         message: resultMessage,
                                         buttonText: "Сыграть еще раз?",
