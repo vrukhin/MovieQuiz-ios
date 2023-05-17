@@ -112,7 +112,6 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     
     func showNextQuestionOrResult() {
         if self.isLastQuestion() {
-            //TODO: вынести инициализацию statisticService в presenter из ViewController
             statisticService!.store(correct: correctAnswers, total: self.questionsAmount)
             let alertPresenter = AlertPresenter(delegate: viewController!)
             let alertModel = AlertModel(title: "Этот раунд окончен",
