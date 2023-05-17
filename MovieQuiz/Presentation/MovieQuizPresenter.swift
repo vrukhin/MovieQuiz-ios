@@ -97,7 +97,17 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         let givenAnswer = isYes
         let isCorrect = givenAnswer == currentQuestion.correctAnswer
         correctAnswers = isCorrect ? correctAnswers + 1 : correctAnswers
-        viewController?.showAnswerResult(isCorrect: isCorrect)
+        showAnswerResult(isCorrect: isCorrect)
+    }
+    
+    private func showAnswerResult(isCorrect: Bool) {
+        viewController?.showImageBorder(isCorrect: isCorrect)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self = self else { return }
+            showNextQuestionOrResult()
+            viewController?.hideImageBorder()
+            viewController?.enableButtons()
+        }
     }
     
     func didReceiveNextQuestion(question: QuizQuestion?) {
@@ -121,14 +131,12 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
                                         completion: {
                 self.restartGame()
                 self.correctAnswers = 0
-                
                 self.questionFactory?.requestNextQuestion()
             }
             )
             alertPresenter.show(alertModel: alertModel)
         } else {
             self.switchToNextQuestion()
-
             self.questionFactory?.requestNextQuestion()
         }
     }

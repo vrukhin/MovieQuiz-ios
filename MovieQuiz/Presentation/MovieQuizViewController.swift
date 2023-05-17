@@ -26,7 +26,7 @@ final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
         noButton.isEnabled = false
     }
     
-    private func enableButtons() {
+    func enableButtons() {
         yesButton.isEnabled = true
         noButton.isEnabled = true
     }
@@ -47,16 +47,13 @@ final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
         counterLabel.text = step.questionNumber
     }
     
-    func showAnswerResult(isCorrect: Bool) {
+    func showImageBorder(isCorrect: Bool) {
         imageView.layer.borderWidth = 8
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self = self else { return }
-            enableButtons()
-            imageView.layer.borderWidth = 0
-            presenter.showNextQuestionOrResult()
-        }
+    }
+    
+    func hideImageBorder() {
+        imageView.layer.borderWidth = 0
     }
     
     // MARK: - Lifecycle
