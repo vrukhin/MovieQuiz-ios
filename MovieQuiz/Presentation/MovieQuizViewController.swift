@@ -69,11 +69,6 @@ final class MovieQuizViewController: UIViewController {
         
         showLoadingIndicator()
     }
-    
-    // MARK: - QuestionFactoryDelegate
-    func didReceiveNextQuestion(question: QuizQuestion?) {
-        presenter.didReceiveNextQuestion(question: question)
-    }
 }
 
 private struct ViewModel {
