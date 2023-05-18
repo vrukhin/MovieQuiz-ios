@@ -8,13 +8,13 @@
 import UIKit
 
 final class MovieQuizPresenter: QuestionFactoryDelegate, AlertPresenterDelegate {
-    let questionsAmount: Int = 10
-    var currentQuestion: QuizQuestion?
+    private let questionsAmount: Int = 10
+    private var currentQuestion: QuizQuestion?
     private var correctAnswers = 0
     private var currentQuestionIndex: Int = 0
     private weak var viewController: MovieQuizViewController?
     private var questionFactory: QuestionFactoryProtocol?
-    var statisticService: StatisticService?
+    private var statisticService: StatisticService?
     
     init(viewController: MovieQuizViewController) {
         self.viewController = viewController
@@ -64,20 +64,20 @@ final class MovieQuizPresenter: QuestionFactoryDelegate, AlertPresenterDelegate 
         alertPresenter.show(alertModel: model)
     }
     
-    func isLastQuestion() -> Bool {
+    private func isLastQuestion() -> Bool {
         currentQuestionIndex == questionsAmount - 1
     }
     
-    func restartGame() {
+    private func restartGame() {
         currentQuestionIndex = 0
         correctAnswers = 0
     }
     
-    func switchToNextQuestion() {
+    private func switchToNextQuestion() {
         currentQuestionIndex += 1
     }
 
-    func convert(model: QuizQuestion) -> QuizStepViewModel {
+    private func convert(model: QuizQuestion) -> QuizStepViewModel {
         return QuizStepViewModel(
             image: UIImage(data: model.image) ?? UIImage(),
             question: model.text,
@@ -120,7 +120,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate, AlertPresenterDelegate 
         }
     }
     
-    func showNextQuestionOrResult() {
+    private func showNextQuestionOrResult() {
         if self.isLastQuestion() {
             statisticService!.store(correct: correctAnswers, total: self.questionsAmount)
             let alertPresenter = AlertPresenter(delegate: self)
