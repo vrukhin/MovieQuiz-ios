@@ -12,11 +12,11 @@ final class MovieQuizPresenter: QuestionFactoryDelegate, AlertPresenterDelegate 
     private var currentQuestion: QuizQuestion?
     private var correctAnswers = 0
     private var currentQuestionIndex: Int = 0
-    private weak var viewController: MovieQuizViewController?
+    private weak var viewController: MovieQuizViewControllerProtocol?
     private var questionFactory: QuestionFactoryProtocol?
     private var statisticService: StatisticService?
     
-    init(viewController: MovieQuizViewController) {
+    init(viewController: MovieQuizViewControllerProtocol) {
         self.viewController = viewController
     }
     
@@ -62,7 +62,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate, AlertPresenterDelegate 
         currentQuestionIndex += 1
     }
 
-    private func convert(model: QuizQuestion) -> QuizStepViewModel {
+    func convert(model: QuizQuestion) -> QuizStepViewModel {
         return QuizStepViewModel(
             image: UIImage(data: model.image) ?? UIImage(),
             question: model.text,
@@ -147,6 +147,6 @@ final class MovieQuizPresenter: QuestionFactoryDelegate, AlertPresenterDelegate 
         guard let alert = alert else {
             return
         }
-        viewController?.present(alert, animated: true)
+        viewController?.showResult(result: alert)
     }
 }

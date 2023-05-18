@@ -1,6 +1,6 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController {
+final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
     private var presenter: MovieQuizPresenter!
     
     
@@ -21,7 +21,7 @@ final class MovieQuizViewController: UIViewController {
         presenter.yesButtonClicked()
     }
     
-    private func disableButtons() {
+    func disableButtons() {
         yesButton.isEnabled = false
         noButton.isEnabled = false
     }
@@ -45,6 +45,10 @@ final class MovieQuizViewController: UIViewController {
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
+    }
+    
+    func showResult(result: UIAlertController) {
+        self.present(result, animated: true)
     }
     
     func showImageBorder(isCorrect: Bool) {
