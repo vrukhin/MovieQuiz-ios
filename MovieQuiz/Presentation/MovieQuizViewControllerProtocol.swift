@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-protocol MovieQuizViewControllerProtocol: AnyObject {
+protocol MovieQuizViewControllerProtocol: AnyObject, AlertPresenterDelegate {
     func showLoadingIndicator()
     func hideLoadingIndicator()
     

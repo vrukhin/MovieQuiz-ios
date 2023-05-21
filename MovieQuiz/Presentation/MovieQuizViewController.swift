@@ -60,6 +60,12 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         imageView.layer.borderWidth = 0
     }
     
+    // MARK: - AlertPresenterDelegate
+    func didReceiveAlert(alert: UIAlertController?) {
+        guard let alert = alert else { return }
+        self.present(alert, animated: true)
+    }
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
