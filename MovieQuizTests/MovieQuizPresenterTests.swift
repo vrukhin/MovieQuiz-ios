@@ -10,6 +10,10 @@ import XCTest
 
 
 final class MovieQuizViewControllerMock: MovieQuizViewControllerProtocol {
+    func didReceiveAlert(alert: UIAlertController?) {
+        
+    }
+    
     func showLoadingIndicator() {
         
     }
