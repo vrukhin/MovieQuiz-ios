@@ -25,9 +25,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
         ]
 */
     private var movies: [MostPopularMovie] = []
-    
-    // Cделать переменную приватной
-    weak var delegate: QuestionFactoryDelegate?
+    private weak var delegate: QuestionFactoryDelegate?
     
     func loadData() {
         moviesLoader.loadMovies { [weak self] result in
